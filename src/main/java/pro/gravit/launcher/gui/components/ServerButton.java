@@ -1,5 +1,7 @@
 package pro.gravit.launcher.gui.components;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
@@ -18,6 +20,10 @@ import java.net.URL;
 import java.util.concurrent.atomic.AtomicLong;
 
 public class ServerButton extends FxComponent {
+
+    private static final Logger logger =
+            LoggerFactory.getLogger(ServerButton.class);
+
     private static final String SERVER_BUTTON_FXML = "components/serverButton.fxml";
     private static final String SERVER_BUTTON_CUSTOM_FXML = "components/serverButton/%s.fxml";
     private static final String SERVER_BUTTON_DEFAULT_IMAGE = "images/servers/example.png";
@@ -111,7 +117,7 @@ public class ServerButton extends FxComponent {
             try {
                 init();
             } catch (Exception e) {
-                LogHelper.error(e);
+                logger.error("", e);
             }
         }
         pane.getChildren().add(layout);
@@ -122,7 +128,7 @@ public class ServerButton extends FxComponent {
             try {
                 init();
             } catch (Exception e) {
-                LogHelper.error(e);
+                logger.error("", e);
             }
         }
         pane.getChildren().add(position, layout);

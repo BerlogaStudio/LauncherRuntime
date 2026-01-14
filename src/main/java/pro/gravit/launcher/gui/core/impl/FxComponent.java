@@ -1,5 +1,7 @@
 package pro.gravit.launcher.gui.core.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
@@ -19,6 +21,10 @@ import java.util.function.BiFunction;
 import java.util.function.Consumer;
 
 public abstract class FxComponent extends VisualComponentBase {
+
+    private static final Logger logger =
+            LoggerFactory.getLogger(FxComponent.class);
+
     protected final JavaFXApplication application;
     protected final ContextHelper contextHelper;
     protected final FXExecutorService fxExecutor;
@@ -133,12 +139,12 @@ public abstract class FxComponent extends VisualComponentBase {
         } else {
             message = application.getTranslation("runtime.request.".concat(message), message);
         }
-        LogHelper.error(e);
+        logger.error("", e);
         application.messageManager.createNotification("Error", message);
     }
 
     public void errorHandle(String e) {
-        LogHelper.error(e);
+        logger.error("", e);
         application.messageManager.createNotification("Error", e);
     }
 

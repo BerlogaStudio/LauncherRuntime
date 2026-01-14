@@ -1,5 +1,7 @@
 package pro.gravit.launcher.gui.scenes.settings;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import javafx.scene.control.ButtonBase;
 import javafx.scene.control.Hyperlink;
 import javafx.stage.DirectoryChooser;
@@ -18,6 +20,10 @@ import java.io.IOException;
 import java.nio.file.Path;
 
 public class GlobalSettingsScene extends BaseSettingsScene {
+
+    private static final Logger logger =
+            LoggerFactory.getLogger(GlobalSettingsScene.class);
+
     private ThemeSelector themeSelector;
     private LanguageSelector languageSelector;
     public GlobalSettingsScene(JavaFXApplication application) {
@@ -81,11 +87,11 @@ public class GlobalSettingsScene extends BaseSettingsScene {
                 (e) -> application.messageManager.showApplyDialog(
                         application.getTranslation("runtime.scenes.settings.deletedir.header"),
                         application.getTranslation("runtime.scenes.settings.deletedir.description"), () -> {
-                            LogHelper.debug("Delete dir: %s", DirBridge.dirUpdates);
+                            logger.debug("Delete dir: {}", DirBridge.dirUpdates);
                             try {
                                 IOHelper.deleteDir(DirBridge.dirUpdates, false);
                             } catch (IOException ex) {
-                                LogHelper.error(ex);
+                                logger.error("", ex);
                                 application.messageManager.createNotification(
                                         application.getTranslation("runtime.scenes.settings.deletedir.fail.header"),
                                         application.getTranslation(

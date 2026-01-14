@@ -1,5 +1,7 @@
 package pro.gravit.launcher.gui.core.commands.runtime;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import javafx.application.ConditionalFeature;
 import javafx.application.Platform;
 import pro.gravit.launcher.gui.core.JavaFXApplication;
@@ -11,6 +13,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class InfoCommand extends Command {
+
+    private static final Logger logger =
+            LoggerFactory.getLogger(InfoCommand.class);
+
     private final JavaFXApplication application;
 
     public InfoCommand(JavaFXApplication application) {
@@ -30,8 +36,8 @@ public class InfoCommand extends Command {
     @Override
     public void invoke(String... args) {
         Platform.runLater(() -> {
-            LogHelper.info("OS %s ARCH %s Java %d", JVMHelper.OS_TYPE.name(), JVMHelper.ARCH_TYPE.name(), JVMHelper.JVM_VERSION);
-            LogHelper.info("JavaFX version: %s", System.getProperty( "javafx.runtime.version"));
+            logger.info("OS {} ARCH {} Java {}", JVMHelper.OS_TYPE.name(), JVMHelper.ARCH_TYPE.name(), JVMHelper.JVM_VERSION);
+            logger.info("JavaFX version: {}", System.getProperty( "javafx.runtime.version"));
             {
                 List<String> supportedFeatures = new ArrayList<>();
                 List<String> unsupportedFeatures = new ArrayList<>();
@@ -42,10 +48,10 @@ public class InfoCommand extends Command {
                         unsupportedFeatures.add(e.name());
                     }
                 }
-                LogHelper.info("JavaFX supported features: [%s]", String.join(",", supportedFeatures));
-                LogHelper.info("JavaFX unsupported features: [%s]", String.join(",", unsupportedFeatures));
+                logger.info("JavaFX supported features: [{}]", String.join(",", supportedFeatures));
+                logger.info("JavaFX unsupported features: [{}]", String.join(",", unsupportedFeatures));
             }
-            LogHelper.info("Is accessibility active %s", Platform.isAccessibilityActive() ? "true" : "false");
+            logger.info("Is accessibility active {}", Platform.isAccessibilityActive() ? "true" : "false");
         });
     }
 }

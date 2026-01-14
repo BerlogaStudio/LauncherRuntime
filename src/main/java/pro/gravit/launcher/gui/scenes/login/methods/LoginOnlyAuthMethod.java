@@ -1,5 +1,7 @@
 package pro.gravit.launcher.gui.scenes.login.methods;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import javafx.scene.control.TextField;
 import pro.gravit.launcher.core.api.method.details.AuthLoginOnlyDetails;
 import pro.gravit.launcher.gui.core.JavaFXApplication;
@@ -14,6 +16,10 @@ import pro.gravit.utils.helper.LogHelper;
 import java.util.concurrent.CompletableFuture;
 
 public class LoginOnlyAuthMethod extends AbstractAuthMethod<AuthLoginOnlyDetails> {
+
+    private static final Logger logger =
+            LoggerFactory.getLogger(LoginOnlyAuthMethod.class);
+
     private final LoginOnlyOverlay overlay;
     private final JavaFXApplication application;
     private final LoginScene.LoginSceneAccessor accessor;
@@ -41,7 +47,7 @@ public class LoginOnlyAuthMethod extends AbstractAuthMethod<AuthLoginOnlyDetails
                 accessor.showContent(overlay);
                 future.complete(null);
             }).exceptionally((th) -> {
-                LogHelper.error(th);
+                logger.error("", th);
                 return null;
             });
         } catch (Exception e) {

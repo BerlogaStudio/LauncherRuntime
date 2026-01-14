@@ -1,5 +1,7 @@
 package pro.gravit.launcher.gui.core;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.stage.Stage;
@@ -47,6 +49,10 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class JavaFXApplication extends Application {
+
+    private static final Logger logger =
+            LoggerFactory.getLogger(JavaFXApplication.class);
+
     private static final AtomicReference<JavaFXApplication> INSTANCE = new AtomicReference<>();
     public final LauncherConfig config = Launcher.getConfig();
     public final ExecutorService workers = Executors.newWorkStealingPool(4);
@@ -113,7 +119,7 @@ public class JavaFXApplication extends Application {
         } catch (Throwable e) {
             JavaRuntimeModule.noLocaleAlert(runtimeSettings.locale.name);
             if (!(e instanceof FileNotFoundException)) {
-                LogHelper.error(e);
+                logger.error("", e);
             }
             Platform.exit();
         }
@@ -143,7 +149,7 @@ public class JavaFXApplication extends Application {
             LauncherEngine.modulesManager.invokeEvent(new ClientGuiPhase(StdJavaRuntimeProvider.getInstance()));
             AuthRequest.registerProviders();
         } catch (Throwable e) {
-            LogHelper.error(e);
+            logger.error("", e);
             JavaRuntimeModule.errorHandleAlert(e);
             Platform.exit();
         }
@@ -181,7 +187,7 @@ public class JavaFXApplication extends Application {
 
     @Override
     public void stop() {
-        LogHelper.debug("JavaFX method stop invoked");
+        logger.debug("JavaFX method stop invoked");
         LauncherEngine.modulesManager.invokeEvent(new ClientExitPhase(0));
     }
 
@@ -238,7 +244,7 @@ public class JavaFXApplication extends Application {
             getHostServices().showDocument(url);
             return true;
         } catch (Throwable e) {
-            LogHelper.error(e);
+            logger.error("", e);
             return false;
         }
     }

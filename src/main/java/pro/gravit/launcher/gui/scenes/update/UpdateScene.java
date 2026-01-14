@@ -1,5 +1,7 @@
 package pro.gravit.launcher.gui.scenes.update;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import javafx.scene.control.*;
 import javafx.scene.layout.Pane;
 import pro.gravit.launcher.core.backend.LauncherBackendAPI;
@@ -11,6 +13,10 @@ import pro.gravit.utils.helper.LogHelper;
 import java.util.concurrent.CompletionException;
 
 public class UpdateScene extends FxScene {
+
+    private static final Logger logger =
+            LoggerFactory.getLogger(UpdateScene.class);
+
     private ProgressBar progressBar;
     private Label speed;
     private Label volume;
@@ -62,7 +68,7 @@ public class UpdateScene extends FxScene {
     }
 
     public void addLog(String string) {
-        LogHelper.dev("Update event %s", string);
+        logger.info("Update event {}", string);
         logOutput.appendText(string.concat("\n"));
     }
 
@@ -86,7 +92,7 @@ public class UpdateScene extends FxScene {
         progressBar.getStyleClass().add("progressError");
         speederr.setVisible(true);
         speedon.setVisible(false);
-        LogHelper.error(e);
+        logger.error("", e);
     }
 
     @Override

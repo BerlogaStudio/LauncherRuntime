@@ -1,5 +1,7 @@
 package pro.gravit.launcher.gui.core.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -22,6 +24,10 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
 public abstract class FxStage {
+
+    private static final Logger logger =
+            LoggerFactory.getLogger(FxStage.class);
+
     protected final JavaFXApplication application;
     protected final Stage stage;
     protected final Scene scene;
@@ -67,7 +73,7 @@ public abstract class FxStage {
             this.scene.getStylesheets().add(JavaFxUtils.getStyleUrl("styles/variables").toString());
             this.scene.getStylesheets().add(JavaFxUtils.getStyleUrl("styles/global").toString());
         } catch (IOException e) {
-            LogHelper.error(e);
+            logger.error("", e);
         }
     }
 
@@ -206,7 +212,7 @@ public abstract class FxStage {
 
     public void disable() {
         var value = disableCounter.incrementAndGet();
-        LogHelper.dev("Disable scene: stack_num: %s | blur: %s | counter: %s",stackPane.getChildren().size(), disablePane == null ? "null" : "not null", value);
+        logger.debug("Disable scene: stack_num: {} | blur: {} | counter: {}", stackPane.getChildren().size(), disablePane == null ? "null" : "not null", value);
         if (value != 1) return;
         Pane layout = (Pane) stackPane.getChildren().get(scenePosition.get());
         layout.setEffect(new GaussianBlur(150));
@@ -221,7 +227,7 @@ public abstract class FxStage {
 
     public void enable() {
         var value = disableCounter.decrementAndGet();
-        LogHelper.dev("Enable scene: stack_num: %s | blur: %s | counter: %s",stackPane.getChildren().size(), disablePane == null ? "null" : "not null", value);
+        logger.debug("Enable scene: stack_num: {} | blur: {} | counter: {}", stackPane.getChildren().size(), disablePane == null ? "null" : "not null", value);
         if (value != 0) return;
         Pane layout = (Pane) stackPane.getChildren().get(scenePosition.get());
         layout.setEffect(null);

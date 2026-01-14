@@ -1,5 +1,7 @@
 package pro.gravit.launcher.gui.core.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import javafx.application.Platform;
 import pro.gravit.launcher.core.api.features.ProfileFeatureAPI;
 import pro.gravit.launcher.core.api.model.SelfUser;
@@ -15,6 +17,10 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 public class BackendCallbackService extends LauncherBackendAPI.MainCallback {
+
+    private static final Logger logger =
+            LoggerFactory.getLogger(BackendCallbackService.class);
+
     private final JavaFXApplication application;
     public CompletableFuture<LauncherBackendAPI.LauncherInitData> initDataCallback;
 
@@ -55,7 +61,7 @@ public class BackendCallbackService extends LauncherBackendAPI.MainCallback {
         boolean isAlreadyShutdown = JavaRuntimeModule.SHUTDOWN_STARTED.getAndSet(true); // It can be called by launcher itself
         if(!isAlreadyShutdown) {
             Platform.exit();
-            LogHelper.info("Method after Platform.exit() called");
+            logger.info("Method after Platform.exit() called");
         }
     }
 }

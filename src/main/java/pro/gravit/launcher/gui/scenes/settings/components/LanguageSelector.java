@@ -1,5 +1,7 @@
 package pro.gravit.launcher.gui.scenes.settings.components;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import javafx.scene.control.ComboBox;
 import javafx.scene.layout.Pane;
 import javafx.util.StringConverter;
@@ -11,6 +13,10 @@ import pro.gravit.utils.helper.LogHelper;
 import java.util.Objects;
 
 public class LanguageSelector {
+
+    private static final Logger logger =
+            LoggerFactory.getLogger(LanguageSelector.class);
+
     private final JavaFXApplication application;
     private final ComboBox<RuntimeSettings.LAUNCHER_LOCALE> comboBox;
 
@@ -33,7 +39,7 @@ public class LanguageSelector {
                 application.runtimeSettings.locale = locale;
                 application.gui.reload();
             } catch (Exception ex) {
-                LogHelper.error(ex);
+                logger.error("", ex);
             }
         });
     }

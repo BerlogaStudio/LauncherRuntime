@@ -1,5 +1,7 @@
 package pro.gravit.launcher.gui.scenes.login;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import javafx.application.Platform;
 import javafx.scene.control.ButtonBase;
 import javafx.scene.control.CheckBox;
@@ -24,6 +26,10 @@ import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 
 public class LoginScene extends FxScene {
+
+    private static final Logger logger =
+            LoggerFactory.getLogger(LoginScene.class);
+
     private List<AuthMethod> auth; //TODO: FIX? Field is assigned but never accessed.
     private CheckBox savePasswordCheckBox;
     private CheckBox autoenter;
@@ -124,12 +130,12 @@ public class LoginScene extends FxScene {
         this.application.authService.setAuthAvailability(authAvailability);
         this.authList.selectionModelProperty().get().select(authAvailability);
         authFlow.init(authAvailability);
-        LogHelper.info("Selected auth: %s", authAvailability.getName());
+        logger.trace("Selected auth: {}", authAvailability.getName());
     }
 
     public void addAuthAvailability(AuthMethod authAvailability) {
         authList.getItems().add(authAvailability);
-        LogHelper.info("Added %s: %s", authAvailability.getName(), authAvailability.getDisplayName());
+        logger.trace("Added {}: {}", authAvailability.getName(), authAvailability.getDisplayName());
     }
 
     public <T> void processing(CompletableFuture<T> request, String text, Consumer<T> onSuccess,
@@ -177,7 +183,7 @@ public class LoginScene extends FxScene {
                     application.skinManager.getSkin(user.getUsername()); //Cache skin
                 }
             } catch (Exception e) {
-                LogHelper.error(e);
+                logger.error("", e);
             }
         }
         contextHelper.runInFxThread(() -> {

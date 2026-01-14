@@ -1,5 +1,7 @@
 package pro.gravit.launcher.gui;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import javafx.stage.Stage;
 import pro.gravit.launcher.base.modules.LauncherInitContext;
 import pro.gravit.launcher.base.modules.LauncherModule;
@@ -23,6 +25,10 @@ import java.util.Base64;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class JavaRuntimeModule extends LauncherModule {
+
+    private static final Logger logger =
+            LoggerFactory.getLogger(JavaRuntimeModule.class);
+
     public final static String RUNTIME_NAME = "stdruntime";
     static LauncherEngine engine;
     private RuntimeProvider provider;
@@ -107,7 +113,7 @@ public class JavaRuntimeModule extends LauncherModule {
             if (m.getDeclaringClass() != JavaFXApplication.class)
                 throw new RuntimeException("Method start not override");
         } catch (Throwable exception) {
-            LogHelper.error(exception);
+            logger.error("", exception);
             noInitMethodAlert();
             LauncherEngine.exitLauncher(0);
         }

@@ -1,5 +1,7 @@
 package pro.gravit.launcher.gui.core.internal;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import pro.gravit.launcher.gui.core.JavaFXApplication;
@@ -14,6 +16,10 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 
 public class FXMLFactory {
+
+    private static final Logger logger =
+            LoggerFactory.getLogger(FXMLFactory.class);
+
     private final ResourceBundle resources;
     private final ExecutorService executorService;
 
@@ -39,8 +45,7 @@ public class FXMLFactory {
         try (InputStream inputStream = IOHelper.newInput(JavaFXApplication.getResourceURL(url))) {
             T result = loader.load(inputStream);
             long endTime = System.currentTimeMillis();
-            LogHelper.debug("Fxml load %s time: c: %d | l: %d | total: %d", url, loaderInstanceTime - startTime,
-                            endTime - loaderInstanceTime, endTime - startTime);
+            logger.debug("Fxml load {} time: c: {} | l: {} | total: {}", url, loaderInstanceTime - startTime, endTime - loaderInstanceTime, endTime - startTime);
             return result;
         }
     }
@@ -53,7 +58,7 @@ public class FXMLFactory {
                 loader.setResources(resources);
             }
         } catch (Exception e) {
-            LogHelper.error(e);
+            logger.error("", e);
             return null;
         }
         loader.setCharset(IOHelper.UNICODE_CHARSET);

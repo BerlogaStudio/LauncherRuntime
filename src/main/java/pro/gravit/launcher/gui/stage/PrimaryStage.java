@@ -1,5 +1,7 @@
 package pro.gravit.launcher.gui.stage;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import javafx.application.Platform;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
@@ -14,6 +16,10 @@ import pro.gravit.utils.helper.LogHelper;
 import java.io.IOException;
 
 public class PrimaryStage extends FxStage {
+
+    private static final Logger logger =
+            LoggerFactory.getLogger(PrimaryStage.class);
+
     public PrimaryStage(JavaFXApplication application, Stage primaryStage, String title) {
         super(application, primaryStage);
         primaryStage.setTitle(title);
@@ -25,7 +31,7 @@ public class PrimaryStage extends FxStage {
             Image icon = new Image(JavaFXApplication.getResourceURL("favicon.png").toString());
             stage.getIcons().add(icon);
         } catch (IOException e) {
-            LogHelper.error(e);
+            logger.error("", e);
         }
         setClipRadius(DesignConstants.SCENE_CLIP_RADIUS, DesignConstants.SCENE_CLIP_RADIUS);
     }

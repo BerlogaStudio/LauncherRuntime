@@ -1,5 +1,7 @@
 package pro.gravit.launcher.gui.scenes.login;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import pro.gravit.launcher.base.events.request.AuthRequestEvent;
 import pro.gravit.launcher.base.request.RequestException;
 import pro.gravit.launcher.core.api.method.AuthMethod;
@@ -23,6 +25,10 @@ import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 
 public class AuthFlow {
+
+    private static final Logger logger =
+            LoggerFactory.getLogger(AuthFlow.class);
+
     public Map<Class<? extends AuthMethodDetails>, AbstractAuthMethod<? extends AuthMethodDetails>> authMethods = new HashMap<>(
             8);
     private final LoginScene.LoginSceneAccessor accessor;
@@ -146,7 +152,7 @@ public class AuthFlow {
             AuthMethod authId, CompletableFuture<SuccessAuth> result) {
         isLoginStarted = true;
         var application = accessor.getApplication();
-        LogHelper.dev("Auth with %s password ***** authId %s", login, authId);
+        logger.info("Auth with {} password ***** authId {}", login, authId);
         accessor.processing(LauncherBackendAPIHolder.getApi().authorize(login, password), application.getTranslation("runtime.overlay.processing.text.auth"),
                             (event) -> result.complete(new SuccessAuth(event, login, password)), (error) -> {
                     if (error.equals(AuthRequestEvent.OAUTH_TOKEN_INVALID)) {

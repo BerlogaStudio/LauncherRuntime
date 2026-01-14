@@ -1,5 +1,7 @@
 package pro.gravit.launcher.gui.components;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -15,6 +17,10 @@ import pro.gravit.launcher.gui.core.utils.JavaFxUtils;
 import pro.gravit.utils.helper.LogHelper;
 
 public class UserBlock extends FxComponent {
+
+    private static final Logger logger =
+            LoggerFactory.getLogger(UserBlock.class);
+
     private ImageView avatar;
     private Image originalAvatarImage;
 
@@ -36,7 +42,7 @@ public class UserBlock extends FxComponent {
                 JavaFxUtils.setStaticRadius(h, DesignConstants.AVATAR_IMAGE_RADIUS);
                 h.setImage(originalAvatarImage);
             } catch (Throwable e) {
-                LogHelper.warning("Skin head error");
+                logger.warn("Skin head error");
             }
         });
         reset();
