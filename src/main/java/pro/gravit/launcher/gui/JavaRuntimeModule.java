@@ -36,7 +36,7 @@ public class JavaRuntimeModule extends LauncherModule {
 
     public JavaRuntimeModule() {
         super(new LauncherModuleInfo("StdJavaRuntime",
-                                     new Version(5, 0, 0, 5, Version.Type.BETA),
+                                     new Version(5, 0, 0, 6, Version.Type.BETA),
                                      0, new String[]{}, new String[]{"runtime"}));
     }
 
