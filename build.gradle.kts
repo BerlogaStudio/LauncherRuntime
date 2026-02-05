@@ -33,7 +33,8 @@ repositories {
 }
 
 dependencies {
-    implementation("com.gravitlauncher.launcher:launcher-runtime:5.7.6")
+    compileOnly("org.slf4j:slf4j-api:2.0.9")
+    implementation("com.gravitlauncher.launcher:launcher-runtime:5.7.8")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
     testImplementation(platform("org.junit:junit-bom:5.10.0"))
     testImplementation("org.junit.jupiter:junit-jupiter")

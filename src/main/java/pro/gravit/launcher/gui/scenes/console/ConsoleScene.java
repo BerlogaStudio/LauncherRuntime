@@ -1,5 +1,7 @@
 package pro.gravit.launcher.gui.scenes.console;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import javafx.event.ActionEvent;
 import javafx.scene.control.ButtonBase;
 import javafx.scene.control.TextArea;
@@ -11,6 +13,10 @@ import pro.gravit.launcher.runtime.managers.ConsoleManager;
 import pro.gravit.utils.helper.LogHelper;
 
 public class ConsoleScene extends FxScene {
+
+    private static final Logger logger =
+            LoggerFactory.getLogger(ConsoleScene.class);
+
     private static final long MAX_LENGTH = 16384;
     private static final int REMOVE_LENGTH = 1024;
     private TextField commandLine;
@@ -48,7 +54,7 @@ public class ConsoleScene extends FxScene {
             ConsoleManager.handler.evalNative(command, false);
             commandLine.getStyleClass().removeAll("InputError");
         } catch (Exception ex) {
-            LogHelper.error(ex);
+            logger.error("", ex);
             commandLine.getStyleClass().add("InputError");
         }
     }

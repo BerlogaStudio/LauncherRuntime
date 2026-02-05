@@ -1,5 +1,7 @@
 package pro.gravit.launcher.gui.core.utils;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.PixelFormat;
 import javafx.scene.image.WritableImage;
@@ -24,6 +26,10 @@ import java.time.temporal.ChronoUnit;
 import java.util.Optional;
 
 public class SkinUtils {
+
+    private static final Logger logger =
+            LoggerFactory.getLogger(SkinUtils.class);
+
     public static final HttpClient client = Downloader.newHttpClientBuilder().build();
 
     public static BufferedImage sumBufferedImage(BufferedImage img1, BufferedImage img2) {
@@ -62,14 +68,14 @@ public class SkinUtils {
                                                   .timeout(Duration.of(10, ChronoUnit.SECONDS))
                                                   .build(), HttpResponse.BodyHandlers.ofInputStream());
             if(response.statusCode() >= 300 || response.statusCode() < 200) {
-                LogHelper.error("Skin %s not found (error %d)", url.toString(), response.statusCode());
+                logger.error("Skin {} not found (error {})", url.toString(), response.statusCode());
                 return null;
             }
             try (InputStream input = response.body()) {
                 return ImageIO.read(input);
             }
         } catch (IOException | InterruptedException e) {
-            LogHelper.error(e);
+            logger.error("", e);
             return null;
         }
     }
@@ -80,7 +86,7 @@ public class SkinUtils {
         int size = 8 * renderScale;
         int x_offset = 5 * 8 * renderScale;
         int y_offset = 8 * renderScale;
-        LogHelper.debug("ShinHead debug: W: %d Scale: %d Offset: %d", width, renderScale, size);
+        logger.debug("ShinHead debug: W: {} Scale: {} Offset: {}", width, renderScale, size);
         return image.getSubimage(x_offset, y_offset, size, size);
     }
 
@@ -88,7 +94,7 @@ public class SkinUtils {
         int width = image.getWidth();
         int renderScale = width / 64;
         int offset = 8 * renderScale;
-        LogHelper.debug("ShinHead debug: W: %d Scale: %d Offset: %d", width, renderScale, offset);
+        logger.debug("ShinHead debug: W: {} Scale: {} Offset: {}", width, renderScale, offset);
         return image.getSubimage(offset, offset, offset, offset);
     }
 

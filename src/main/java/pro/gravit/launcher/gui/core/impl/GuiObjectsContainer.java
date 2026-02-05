@@ -1,5 +1,7 @@
 package pro.gravit.launcher.gui.core.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import pro.gravit.launcher.gui.components.FxSceneBackground;
 import pro.gravit.launcher.gui.core.JavaFXApplication;
 import pro.gravit.launcher.gui.overlays.ProcessingOverlay;
@@ -25,6 +27,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class GuiObjectsContainer {
+
+    private static final Logger logger =
+            LoggerFactory.getLogger(GuiObjectsContainer.class);
+
     private final JavaFXApplication application;
     private final Map<String, FxComponent> components = new HashMap<>();
     public ProcessingOverlay processingOverlay;
@@ -103,7 +109,7 @@ public class GuiObjectsContainer {
             components.put(instance.getName(), instance);
             return instance;
         } catch (Throwable e) {
-            LogHelper.error(e);
+            logger.error("", e);
             throw new RuntimeException(e);
         }
     }

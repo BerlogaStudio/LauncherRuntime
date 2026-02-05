@@ -1,5 +1,7 @@
 package pro.gravit.launcher.gui.core;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import javafx.application.Application;
 import pro.gravit.launcher.runtime.LauncherEngine;
 import pro.gravit.launcher.runtime.gui.RuntimeProvider;
@@ -15,6 +17,10 @@ import java.nio.file.Path;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class StdJavaRuntimeProvider implements RuntimeProvider {
+
+    private static final Logger logger =
+            LoggerFactory.getLogger(StdJavaRuntimeProvider.class);
+
     public static volatile Path updatePath;
     private static final AtomicReference<StdJavaRuntimeProvider> INSTANCE = new AtomicReference<>();
 
@@ -32,9 +38,9 @@ public class StdJavaRuntimeProvider implements RuntimeProvider {
 
     @Override
     public void run(String[] args) {
-        LogHelper.debug("Start JavaFX Application");
+        logger.debug("Start JavaFX Application");
         Application.launch(JavaFXApplication.class, args);
-        LogHelper.debug("Post Application.launch method invoked");
+        logger.debug("Post Application.launch method invoked");
         if (updatePath != null) {
             LauncherUpdater.nothing();
             LauncherEngine.beforeExit(0);
@@ -47,7 +53,7 @@ public class StdJavaRuntimeProvider implements RuntimeProvider {
                 }
                 Files.deleteIfExists(updatePath);
             } catch (IOException e) {
-                LogHelper.error(e);
+                logger.error("", e);
                 LauncherEngine.forceExit(-109);
             }
             LauncherUpdater.restart();

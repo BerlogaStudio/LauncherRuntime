@@ -1,5 +1,7 @@
 package pro.gravit.launcher.gui.core.commands.runtime;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import javafx.scene.layout.Pane;
 import pro.gravit.launcher.gui.core.JavaFXApplication;
 import pro.gravit.launcher.gui.core.impl.FxStage;
@@ -7,6 +9,10 @@ import pro.gravit.utils.command.Command;
 import pro.gravit.utils.helper.LogHelper;
 
 public class GetSizeCommand extends Command {
+
+    private static final Logger logger =
+            LoggerFactory.getLogger(GetSizeCommand.class);
+
     private final JavaFXApplication application;
 
     public GetSizeCommand(JavaFXApplication application) {
@@ -27,12 +33,12 @@ public class GetSizeCommand extends Command {
     public void invoke(String... args) throws Exception {
         FxStage fxStage = application.getMainStage();
         var stage = fxStage.getStage();
-        LogHelper.info("Stage: H: %f W: %f", stage.getHeight(), stage.getWidth());
+        logger.info("Stage: H: {} W: {}", stage.getHeight(), stage.getWidth());
         var scene = stage.getScene();
-        LogHelper.info("Scene: H: %f W: %f", scene.getHeight(), scene.getWidth());
+        logger.info("Scene: H: {} W: {}", scene.getHeight(), scene.getWidth());
         var stackPane = (Pane)scene.getRoot();
-        LogHelper.info("StackPane: H: %f W: %f", stackPane.getHeight(), stackPane.getWidth());
+        logger.info("StackPane: H: {} W: {}", stackPane.getHeight(), stackPane.getWidth());
         var layout = (Pane)stackPane.getChildren().get(0);
-        LogHelper.info("Layout: H: %f W: %f", layout.getHeight(), layout.getWidth());
+        logger.info("Layout: H: {} W: {}", layout.getHeight(), layout.getWidth());
     }
 }

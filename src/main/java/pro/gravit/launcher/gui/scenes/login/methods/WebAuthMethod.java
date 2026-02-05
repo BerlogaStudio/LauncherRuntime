@@ -1,5 +1,7 @@
 package pro.gravit.launcher.gui.scenes.login.methods;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
@@ -19,6 +21,10 @@ import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 
 public class WebAuthMethod extends AbstractAuthMethod<AuthWebDetails> {
+
+    private static final Logger logger =
+            LoggerFactory.getLogger(WebAuthMethod.class);
+
     WebAuthOverlay overlay;
     private final JavaFXApplication application;
     private final LoginScene.LoginSceneAccessor accessor;
@@ -55,7 +61,7 @@ public class WebAuthMethod extends AbstractAuthMethod<AuthWebDetails> {
     public CompletableFuture<AuthFlow.LoginAndPasswordResult> auth(AuthWebDetails details) {
         overlay.future = new CompletableFuture<>();
         overlay.follow(details.url(), details.redirectUrl(), (r) -> {
-            LogHelper.dev("Redirect uri: %s", r);
+            logger.info("Redirect uri: {}", r);
             overlay.future.complete(new AuthFlow.LoginAndPasswordResult(null, new AuthOAuthPassword(r)));
         });
         return overlay.future;
@@ -114,13 +120,13 @@ public class WebAuthMethod extends AbstractAuthMethod<AuthWebDetails> {
         }
 
         public void follow(String url, String redirectUrl, Consumer<String> redirectCallback) {
-            LogHelper.dev("Load url %s", url);
+            logger.info("Load url {}", url);
             webView.getEngine().setJavaScriptEnabled(true);
             webView.getEngine().load(url);
             if (redirectCallback != null) {
                 webView.getEngine().locationProperty().addListener((obs, oldLocation, newLocation) -> {
                     if (newLocation != null) {
-                        LogHelper.dev("Location: %s", newLocation);
+                        logger.info("Location: {}", newLocation);
                         if (redirectUrl != null) {
                             if (newLocation.startsWith(redirectUrl)) {
                                 redirectCallback.accept(newLocation);

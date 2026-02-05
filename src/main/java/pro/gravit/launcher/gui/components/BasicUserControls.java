@@ -23,14 +23,26 @@ public class BasicUserControls extends FxComponent {
     @Override
     protected void doInit() {
         LookupHelper.<ButtonBase>lookupIfPossible(layout, "#controls", "#exit")
-                    .ifPresent((b) -> b.setOnAction((e) -> currentStage.close()));
+                    .ifPresent((b) -> b.setOnAction((e) -> onExit()));
         LookupHelper.<ButtonBase>lookupIfPossible(layout, "#controls", "#minimize")
-                    .ifPresent((b) -> b.setOnAction((e) -> currentStage.hide()));
+                    .ifPresent((b) -> b.setOnAction((e) -> onMinimize()));
         LookupHelper.<ButtonBase>lookupIfPossible(layout, "#controls", "#deauth").ifPresent(b -> b.setOnAction(
-                (e) -> application.messageManager.showApplyDialog(
-                        application.getTranslation("runtime.scenes.settings.exitDialog.header"),
-                        application.getTranslation("runtime.scenes.settings.exitDialog.description"),
-                        this::userExit, () -> {}, true)));
+                (e) -> onDeauth()));
+    }
+
+    protected void onExit() {
+        currentStage.close();
+    }
+
+    protected void onMinimize() {
+        currentStage.hide();
+    }
+
+    protected void onDeauth() {
+        application.messageManager.showApplyDialog(
+                application.getTranslation("runtime.scenes.settings.exitDialog.header"),
+                application.getTranslation("runtime.scenes.settings.exitDialog.description"),
+                this::userExit, () -> {}, true);
     }
 
     protected void userExit() {

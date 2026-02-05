@@ -1,5 +1,7 @@
 package pro.gravit.launcher.gui.scenes.serverinfo;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBase;
 import javafx.scene.control.Label;
@@ -15,6 +17,10 @@ import pro.gravit.launcher.gui.core.impl.FxScene;
 import pro.gravit.launcher.gui.scenes.interfaces.SceneSupportUserBlock;
 
 public class ServerInfoScene extends FxScene implements SceneSupportUserBlock {
+
+    private static final Logger logger =
+            LoggerFactory.getLogger(ServerInfoScene.class);
+
     private ServerButton serverButton;
     private UserBlock userBlock;
 
@@ -108,7 +114,7 @@ public class ServerInfoScene extends FxScene implements SceneSupportUserBlock {
             } else {
                 clientInstance.start();
                 clientInstance.getOnWriteParamsFuture().thenAccept((ok) -> {
-                    LogHelper.info("Params write successful. Exit...");
+                    logger.info("Params write successful. Exit...");
                     Platform.exit();
                 }).exceptionally((ex) -> {
                     contextHelper.runInFxThread(() -> errorHandle(ex));

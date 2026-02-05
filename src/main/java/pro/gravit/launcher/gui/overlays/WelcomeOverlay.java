@@ -1,5 +1,7 @@
 package pro.gravit.launcher.gui.overlays;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -11,6 +13,10 @@ import pro.gravit.launcher.gui.core.utils.JavaFxUtils;
 import pro.gravit.utils.helper.LogHelper;
 
 public class WelcomeOverlay extends FxOverlay {
+
+    private static final Logger logger =
+            LoggerFactory.getLogger(WelcomeOverlay.class);
+
     private Image originalImage;
     public WelcomeOverlay(JavaFXApplication application) {
         super("overlay/welcome/welcome.fxml", application);
@@ -44,7 +50,7 @@ public class WelcomeOverlay extends FxOverlay {
                     h.setImage(originalImage);
                 }
             } catch (Throwable e) {
-                LogHelper.warning("Skin head error");
+                logger.warn("Skin head error");
             }
         });
     }

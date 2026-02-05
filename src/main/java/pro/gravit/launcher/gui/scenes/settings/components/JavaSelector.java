@@ -1,5 +1,7 @@
 package pro.gravit.launcher.gui.scenes.settings.components;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
@@ -14,6 +16,10 @@ import pro.gravit.launcher.gui.helper.LookupHelper;
 import pro.gravit.utils.helper.LogHelper;
 
 public class JavaSelector {
+
+    private static final Logger logger =
+            LoggerFactory.getLogger(JavaSelector.class);
+
     private final ComboBox<LauncherBackendAPI.Java> comboBox;
     private final LauncherBackendAPI.ClientProfileSettings profileSettings;
     private final ProfileFeatureAPI.ClientProfile profile;
@@ -45,7 +51,7 @@ public class JavaSelector {
             comboBox.setOnAction(e -> {
                 LauncherBackendAPI.Java version = comboBox.getValue();
                 if (version == null) return;
-                LogHelper.info("Select Java %s", version.getPath().toAbsolutePath().toString());
+                logger.info("Select Java {}", version.getPath().toAbsolutePath().toString());
                 profileSettings.setSelectedJava(version);
             });
         });

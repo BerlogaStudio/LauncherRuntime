@@ -1,5 +1,7 @@
 package pro.gravit.launcher.gui.dialogs;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
@@ -14,6 +16,10 @@ import java.util.Map;
 import java.util.function.Consumer;
 
 public class NotificationDialog extends AbstractDialog {
+
+    private static final Logger logger =
+            LoggerFactory.getLogger(NotificationDialog.class);
+
     public record NotificationSlot(Consumer<Double> onScroll, double size) {
     }
 
@@ -97,7 +103,7 @@ public class NotificationDialog extends AbstractDialog {
             slotsInfo.remove(positionSlot);
         }
         this.positionInfo = position;
-        LogHelper.info("Notification position: %s", position);
+        logger.info("Notification position: {}", position);
         if (position == null) return;
         NotificationSlotsInfo slotsInfo = slots.get(position);
         if (slotsInfo == null) {
@@ -121,7 +127,7 @@ public class NotificationDialog extends AbstractDialog {
     @Override
     public LookupHelper.Point2D getOutSceneCoords(Rectangle2D bounds) {
         if (positionInfo == null) {
-            LogHelper.info("Notification position: using central");
+            logger.info("Notification position: using central");
             return super.getOutSceneCoords(bounds);
         }
         return PositionHelper.calculate(positionInfo, layout.getPrefWidth(), layout.getPrefHeight(), 0,
@@ -138,6 +144,6 @@ public class NotificationDialog extends AbstractDialog {
     @Override
     public void errorHandle(Throwable e) {
         // No Stack Overflow
-        LogHelper.error(e);
+        logger.error("", e);
     }
 }

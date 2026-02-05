@@ -1,5 +1,7 @@
 package pro.gravit.launcher.gui.overlays;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Labeled;
@@ -14,6 +16,10 @@ import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 
 public class ProcessingOverlay extends FxOverlay {
+
+    private static final Logger logger =
+            LoggerFactory.getLogger(ProcessingOverlay.class);
+
     private Labeled description;
 
     public ProcessingOverlay(JavaFXApplication application) {
@@ -56,7 +62,7 @@ public class ProcessingOverlay extends FxOverlay {
             ContextHelper.runInFxThreadStatic(() -> show(stage, (e) -> {
                 description.setText(message);
                 request.thenAccept((result) -> {
-                    LogHelper.dev("RequestFuture complete normally");
+                    logger.trace("RequestFuture complete normally");
                     onSuccess.accept(result);
                     ContextHelper.runInFxThreadStatic(() -> hide(0, null));
                 }).exceptionally((error) -> {

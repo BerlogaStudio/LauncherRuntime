@@ -1,10 +1,16 @@
 package pro.gravit.launcher.gui.core.commands.runtime;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import pro.gravit.launcher.gui.core.impl.MessageManager;
 import pro.gravit.utils.command.Command;
 import pro.gravit.utils.helper.LogHelper;
 
 public class DialogCommand extends Command {
+
+    private static final Logger logger =
+            LoggerFactory.getLogger(DialogCommand.class);
+
     private final MessageManager messageManager;
 
     public DialogCommand(MessageManager messageManager) {
@@ -30,13 +36,9 @@ public class DialogCommand extends Command {
         String dialogType = args[2];
         switch (dialogType) {
             case "dialog" -> messageManager.showDialog(header, message,
-                                                       () -> LogHelper.info("Dialog apply callback"),
-                                                       () -> LogHelper.info("Dialog cancel callback"), isLauncher);
+                                                       () -> logger.info("Dialog apply callback"), () -> LogHelper.info("Dialog cancel callback"), isLauncher);
             case "dialogApply" -> messageManager.showApplyDialog(header, message,
-                                                                 () -> LogHelper.info("Dialog apply callback"),
-                                                                 () -> LogHelper.info("Dialog deny callback"),
-                                                                 () -> LogHelper.info("Dialog close callback"),
-                                                                 isLauncher);
+                                                                 () -> logger.info("Dialog apply callback"), () -> LogHelper.info("Dialog deny callback"), () -> LogHelper.info("Dialog close callback"), isLauncher);
         }
     }
 }

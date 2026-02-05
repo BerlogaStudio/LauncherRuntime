@@ -1,5 +1,7 @@
 package pro.gravit.launcher.gui.scenes.login.methods;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import javafx.scene.control.TextField;
 import pro.gravit.launcher.core.api.method.AuthMethodPassword;
 import pro.gravit.launcher.core.api.method.details.AuthPasswordDetails;
@@ -16,6 +18,10 @@ import pro.gravit.utils.helper.LogHelper;
 import java.util.concurrent.CompletableFuture;
 
 public class LoginAndPasswordAuthMethod extends AbstractAuthMethod<AuthPasswordDetails> {
+
+    private static final Logger logger =
+            LoggerFactory.getLogger(LoginAndPasswordAuthMethod.class);
+
     private final LoginAndPasswordOverlay overlay;
     private final JavaFXApplication application;
     private final LoginScene.LoginSceneAccessor accessor;
@@ -44,7 +50,7 @@ public class LoginAndPasswordAuthMethod extends AbstractAuthMethod<AuthPasswordD
                 accessor.showContent(overlay);
                 future.complete(null);
             }).exceptionally((th) -> {
-                LogHelper.error(th);
+                logger.error("", th);
                 return null;
             });
         } catch (Exception e) {
