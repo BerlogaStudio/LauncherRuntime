@@ -3,7 +3,9 @@ package pro.gravit.launcher.gui.scenes.debug;
 import javafx.scene.control.ButtonBase;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
+import javafx.scene.layout.Pane;
 import pro.gravit.launcher.core.backend.LauncherBackendAPI;
+import pro.gravit.launcher.gui.components.BasicUserControls;
 import pro.gravit.launcher.gui.core.JavaFXApplication;
 import pro.gravit.launcher.gui.JavaRuntimeModule;
 import pro.gravit.launcher.gui.helper.LookupHelper;
@@ -19,6 +21,7 @@ public class DebugScene extends FxScene {
     public DebugScene(JavaFXApplication application) {
         super("scenes/debug/debug.fxml", application);
         this.isResetOnShow = true;
+        this._basicUserControlConstructor = DebugBasicUserControls::new;
     }
 
     @Override
@@ -41,6 +44,7 @@ public class DebugScene extends FxScene {
                 errorHandle(ex);
             }
         });
+
     }
 
 
@@ -71,5 +75,28 @@ public class DebugScene extends FxScene {
     @Override
     public String getName() {
         return "debug";
+    }
+
+    private class DebugBasicUserControls extends BasicUserControls {
+
+        public DebugBasicUserControls(Pane layout, JavaFXApplication application) {
+            super(layout, application);
+        }
+
+        @Override
+        protected void onExit() {
+            if(processLogOutput == null || processLogOutput.isReadyToExit.get()) {
+                super.onExit();
+            }
+            else {
+                application.messageManager.showApplyDialog(
+                        application.getTranslation("runtime.scenes.debug.forceExitDialog.header"),
+                        application.getTranslation("runtime.scenes.debug.forceExitDialog.description"),
+                        () -> {
+                            processLogOutput.terminate();
+                            super.onExit();
+                        }, () -> {}, true);
+            }
+        }
     }
 }

@@ -18,7 +18,7 @@ public class ProcessLogOutput extends LauncherBackendAPI.RunCallback {
     private boolean isOutputRunned;
     private Runnable terminateProcessCallback;
     private boolean exitWhenStarted;
-    private AtomicBoolean isReadyToExit = new AtomicBoolean();
+    AtomicBoolean isReadyToExit = new AtomicBoolean();
     private AtomicBoolean isRunned = new AtomicBoolean();
     private AtomicBoolean isAttached = new AtomicBoolean(true);
 
