@@ -80,7 +80,10 @@ public class UploadAssetOverlay extends CenterOverlay {
                         }
                     }
                 }
-                contextHelper.runInFxThread(() -> application.messageManager.createNotification(application.getTranslation("runtime.overlay.uploadasset.success.header"), application.getTranslation("runtime.overlay.uploadasset.success.description")));
+                contextHelper.runInFxThread(() -> {
+                    application.messageManager.createNotification(application.getTranslation("runtime.overlay.uploadasset.success.header"), application.getTranslation("runtime.overlay.uploadasset.success.description"));
+                    hide(0, null);
+                });
             }).handle(this::errorHandle);
         } catch (IOException e) {
             errorHandle(e);
