@@ -8,6 +8,7 @@ import pro.gravit.launcher.gui.dialogs.InfoDialog;
 import pro.gravit.launcher.gui.dialogs.NotificationDialog;
 import pro.gravit.launcher.gui.helper.PositionHelper;
 import pro.gravit.launcher.gui.stage.DialogStage;
+import javafx.util.Duration;
 
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -50,6 +51,10 @@ public class MessageManager {
                 dialog.init();
                 stage.pushNotification(dialog.getFxmlRootPrivate());
                 dialog.setOnClose(() -> stage.pullNotification(dialog.getFxmlRootPrivate()));
+                ContextHelper.runAfterTimeoutStatic(Duration.seconds(3), () -> {
+                    dialog.close();
+                    return null;
+                });
             });
         } else {
             AtomicReference<DialogStage> stage = new AtomicReference<>(null);
@@ -64,6 +69,11 @@ public class MessageManager {
                 });
                 stage.set(new DialogStage(application, head, dialog));
                 stage.get().show();
+
+                ContextHelper.runAfterTimeoutStatic(Duration.seconds(3), () -> {
+                    dialog.close();
+                    return null;
+                });
             });
         }
     }
