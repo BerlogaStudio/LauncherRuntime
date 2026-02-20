@@ -23,7 +23,7 @@ public class VersionCommand extends Command {
 
     @Override
     public void invoke(String... args) {
-        logger.info("", JavaRuntimeModule.getLauncherInfo());
+        logger.info("{}", JavaRuntimeModule.getLauncherInfo());
         logger.info("JDK Path: {}", System.getProperty("java.home", "UNKNOWN"));
     }
 }

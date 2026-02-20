@@ -144,7 +144,7 @@ public abstract class FxComponent extends VisualComponentBase {
     }
 
     public void errorHandle(String e) {
-        logger.error("", e);
+        logger.error("{}", e);
         application.messageManager.createNotification("Error", e);
     }
 
