@@ -59,15 +59,18 @@ public class MessageManager {
         } else {
             AtomicReference<DialogStage> stage = new AtomicReference<>(null);
             ContextHelper.runInFxThreadStatic(() -> {
+                dialog.getFxmlRootPrivate().applyCss();
+                double contentHeight = dialog.getFxmlRootPrivate().prefHeight(360.0);
                 NotificationDialog.NotificationSlot slot = new NotificationDialog.NotificationSlot(
                         (scrollTo) -> stage.get().stage.setY(stage.get().stage.getY() + scrollTo),
-                        ((Pane) dialog.getFxmlRootPrivate()).getPrefHeight() + 20);
+                        contentHeight + 20);
                 dialog.setPosition(PositionHelper.PositionInfo.BOTTOM_RIGHT, slot);
                 dialog.setOnClose(() -> {
                     stage.get().close();
                     stage.get().stage.setScene(null);
                 });
                 stage.set(new DialogStage(application, head, dialog));
+                stage.get().stage.sizeToScene();
                 stage.get().show();
 
                 ContextHelper.runAfterTimeoutStatic(Duration.seconds(3), () -> {
