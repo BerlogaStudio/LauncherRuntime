@@ -1,7 +1,6 @@
 package pro.gravit.launcher.gui.core.service;
 
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import pro.gravit.launcher.base.Launcher;
 import pro.gravit.launcher.base.LauncherConfig;
@@ -10,8 +9,6 @@ import pro.gravit.launcher.base.request.auth.password.AuthPlainPassword;
 import pro.gravit.launcher.core.api.method.AuthMethod;
 import pro.gravit.launcher.core.api.method.AuthMethodPassword;
 import pro.gravit.launcher.core.api.model.SelfUser;
-import pro.gravit.launcher.core.api.model.Texture;
-import pro.gravit.launcher.core.api.model.User;
 import pro.gravit.launcher.gui.core.JavaFXApplication;
 import pro.gravit.utils.helper.SecurityHelper;
 

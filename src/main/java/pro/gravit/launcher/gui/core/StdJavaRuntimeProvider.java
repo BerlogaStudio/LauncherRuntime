@@ -7,7 +7,6 @@ import pro.gravit.launcher.runtime.LauncherEngine;
 import pro.gravit.launcher.runtime.gui.RuntimeProvider;
 import pro.gravit.launcher.runtime.utils.LauncherUpdater;
 import pro.gravit.utils.helper.IOHelper;
-import pro.gravit.utils.helper.LogHelper;
 
 import java.io.IOException;
 import java.io.InputStream;

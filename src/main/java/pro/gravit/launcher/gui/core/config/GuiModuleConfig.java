@@ -2,9 +2,6 @@ package pro.gravit.launcher.gui.core.config;
 
 import pro.gravit.launcher.core.LauncherInject;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public class GuiModuleConfig {
     @LauncherInject(value = "modules.javaruntime.createaccounturl")
     public String createAccountURL;

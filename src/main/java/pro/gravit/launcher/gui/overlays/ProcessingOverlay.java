@@ -10,7 +10,6 @@ import pro.gravit.launcher.gui.core.impl.FxOverlay;
 import pro.gravit.launcher.gui.helper.LookupHelper;
 import pro.gravit.launcher.gui.core.impl.FxStage;
 import pro.gravit.launcher.gui.core.impl.ContextHelper;
-import pro.gravit.utils.helper.LogHelper;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;

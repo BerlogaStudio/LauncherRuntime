@@ -11,7 +11,6 @@ import pro.gravit.launcher.gui.core.JavaFXApplication;
 import pro.gravit.launcher.gui.DesignConstants;
 import pro.gravit.launcher.gui.core.impl.FxStage;
 import pro.gravit.launcher.gui.core.impl.UIComponent;
-import pro.gravit.utils.helper.LogHelper;
 
 import java.io.IOException;
 

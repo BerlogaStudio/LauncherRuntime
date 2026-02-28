@@ -14,7 +14,6 @@ import pro.gravit.launcher.gui.helper.LookupHelper;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
-import java.util.function.Supplier;
 
 public abstract class FxScene extends FxComponent {
     protected final LauncherConfig launcherConfig;

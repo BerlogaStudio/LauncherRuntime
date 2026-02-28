@@ -15,7 +15,6 @@ import pro.gravit.launcher.core.api.method.password.AuthChainPassword;
 import pro.gravit.launcher.core.api.model.SelfUser;
 import pro.gravit.launcher.core.backend.LauncherBackendAPIHolder;
 import pro.gravit.launcher.gui.scenes.login.methods.*;
-import pro.gravit.utils.helper.LogHelper;
 
 import java.util.ArrayList;
 import java.util.HashMap;

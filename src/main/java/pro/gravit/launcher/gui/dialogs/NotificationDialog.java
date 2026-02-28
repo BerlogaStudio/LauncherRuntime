@@ -8,7 +8,6 @@ import javafx.scene.layout.Pane;
 import pro.gravit.launcher.gui.core.JavaFXApplication;
 import pro.gravit.launcher.gui.helper.LookupHelper;
 import pro.gravit.launcher.gui.helper.PositionHelper;
-import pro.gravit.utils.helper.LogHelper;
 
 import java.util.HashMap;
 import java.util.LinkedList;

@@ -10,7 +10,6 @@ import pro.gravit.launcher.gui.DesignConstants;
 import pro.gravit.launcher.gui.core.impl.FxOverlay;
 import pro.gravit.launcher.gui.helper.LookupHelper;
 import pro.gravit.launcher.gui.core.utils.JavaFxUtils;
-import pro.gravit.utils.helper.LogHelper;
 
 public class WelcomeOverlay extends FxOverlay {
 

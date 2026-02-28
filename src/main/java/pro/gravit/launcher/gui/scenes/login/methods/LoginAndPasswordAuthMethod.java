@@ -13,7 +13,6 @@ import pro.gravit.launcher.gui.core.impl.ContextHelper;
 import pro.gravit.launcher.gui.scenes.login.AuthFlow;
 import pro.gravit.launcher.gui.scenes.login.AuthButton;
 import pro.gravit.launcher.gui.scenes.login.LoginScene;
-import pro.gravit.utils.helper.LogHelper;
 
 import java.util.concurrent.CompletableFuture;
 

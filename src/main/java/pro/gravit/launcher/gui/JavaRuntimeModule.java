@@ -17,7 +17,6 @@ import pro.gravit.launcher.runtime.client.events.ClientPreGuiPhase;
 import pro.gravit.launcher.runtime.gui.RuntimeProvider;
 import pro.gravit.utils.Version;
 import pro.gravit.utils.helper.JVMHelper;
-import pro.gravit.utils.helper.LogHelper;
 
 import javax.swing.*;
 import java.lang.reflect.Method;
