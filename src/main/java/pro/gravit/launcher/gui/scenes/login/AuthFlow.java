@@ -21,6 +21,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
 
 public class AuthFlow {
@@ -35,6 +36,7 @@ public class AuthFlow {
     private AuthMethod authAvailability;
     private volatile AbstractAuthMethod<AuthMethodDetails> authMethodOnShow;
     private final Consumer<SuccessAuth> onSuccessAuth;
+    private AtomicBoolean isTryAuthorizeChecked = new AtomicBoolean();
     public boolean isLoginStarted;
 
     public AuthFlow(LoginScene.LoginSceneAccessor accessor, Consumer<SuccessAuth> onSuccessAuth) {
@@ -203,11 +205,12 @@ public class AuthFlow {
                                     () -> onSuccessAuth.accept(new SuccessAuth(result, null, null))),
                             (error) -> {
                                 if (error.equals(AuthRequestEvent.OAUTH_TOKEN_INVALID)) {
+                                    isTryAuthorizeChecked.set(true);
                                     accessor.runInFxThread(this::loginWithGui);
                                 } else {
                                 }
                             });
-        return false;
+        return isTryAuthorizeChecked.get();
     }
 
 
