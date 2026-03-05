@@ -38,7 +38,6 @@ public class AuthFlow {
     private AuthMethod authAvailability;
     private volatile AbstractAuthMethod<AuthMethodDetails> authMethodOnShow;
     private final Consumer<SuccessAuth> onSuccessAuth;
-    private AtomicBoolean isTryAuthorizeChecked = new AtomicBoolean();
     public boolean isLoginStarted;
 
     public AuthFlow(LoginScene.LoginSceneAccessor accessor, Consumer<SuccessAuth> onSuccessAuth) {
