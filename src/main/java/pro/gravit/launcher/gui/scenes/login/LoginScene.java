@@ -14,10 +14,12 @@ import pro.gravit.launcher.base.events.request.GetAvailabilityAuthRequestEvent;
 import pro.gravit.launcher.core.api.method.AuthMethod;
 import pro.gravit.launcher.core.api.model.Texture;
 import pro.gravit.launcher.core.backend.LauncherBackendAPIHolder;
+import pro.gravit.launcher.core.backend.UserSettings;
 import pro.gravit.launcher.gui.core.JavaFXApplication;
 import pro.gravit.launcher.gui.core.impl.UIComponent;
 import pro.gravit.launcher.gui.helper.LookupHelper;
 import pro.gravit.launcher.gui.core.impl.FxScene;
+import pro.gravit.launcher.runtime.backend.BackendSettings;
 
 import java.net.URI;
 import java.util.List;
@@ -60,12 +62,32 @@ public class LoginScene extends FxScene {
         autoenter = LookupHelper.lookup(layout, "#autoenter");
         autoenter.setSelected(application.runtimeSettings.autoAuth);
         autoenter.setOnAction((event) -> application.runtimeSettings.autoAuth = autoenter.isSelected());
+
+        // Показываем галочку сохранения если есть логин или OAuth токен
+        savePasswordCheckBox.setSelected(application.runtimeSettings.login != null || hasOAuthToken());
+        savePasswordCheckBox.setOnAction((event) -> {
+            if (!savePasswordCheckBox.isSelected()) {
+                application.runtimeSettings.login = null;
+                application.runtimeSettings.password = null;
+                application.runtimeSettings.lastAuth = null;
+                // Вызываем userExit только если пользователь реально авторизован
+                if (LauncherBackendAPIHolder.getApi().getSelfUser() != null) {
+                    LauncherBackendAPIHolder.getApi().userExit();
+                } else {
+                    // Просто очищаем токен локально без запроса к серверу
+                    UserSettings settings = LauncherBackendAPIHolder.getApi().getUserSettings("backend", (a) -> null);
+                    if (settings instanceof BackendSettings backendSettings) {
+                        backendSettings.auth = null;
+                    }
+                }
+            }
+        });
+
         content = LookupHelper.lookup(layout, "#content");
         if (application.guiModuleConfig.createAccountURL != null) {
             LookupHelper.<Text>lookup(header, "#createAccount")
                         .setOnMouseClicked((e) -> application.openURL(application.guiModuleConfig.createAccountURL));
         }
-
         if (application.guiModuleConfig.forgotPassURL != null) {
             LookupHelper.<Text>lookup(header, "#forgotPass")
                         .setOnMouseClicked((e) -> application.openURL(application.guiModuleConfig.forgotPassURL));
@@ -74,7 +96,6 @@ public class LoginScene extends FxScene {
         authList.setConverter(new AuthAvailabilityStringConverter());
         authList.setOnAction((e) -> changeAuthAvailability(authList.getSelectionModel().getSelectedItem()));
         authFlow.prepare();
-        // Verify Launcher
     }
 
     @Override
@@ -82,7 +103,18 @@ public class LoginScene extends FxScene {
         getAvailabilityAuth();
     }
 
+    private void clearOAuthToken() {
+        // Удаляем backend settings с токеном
+        LauncherBackendAPIHolder.getApi().getUserSettings("backend", (a) -> null);
+        // Конкретный способ очистки зависит от реализации LauncherBackendAPI
+    }
     private void getAvailabilityAuth() {
+        if (application.runtimeSettings.lastAuth == null) {
+            UserSettings settings = LauncherBackendAPIHolder.getApi().getUserSettings("backend", (a) -> null);
+            if (settings instanceof BackendSettings backendSettings) {
+                backendSettings.auth = null;
+            }
+        }
         processing(application.backendCallbackService.initDataCallback,
                    application.getTranslation("runtime.overlay.processing.text.launcher"),
                    (initData) -> contextHelper.runInFxThread(() -> {
@@ -115,11 +147,29 @@ public class LoginScene extends FxScene {
                         });
                 });
     }
-
     private void runAutoAuth() {
-        if (application.guiModuleConfig.autoAuth || application.runtimeSettings.autoAuth) {
-            contextHelper.runInFxThread(authFlow::loginWithGui);
+        boolean shouldAutoAuth = application.guiModuleConfig.autoAuth
+                || application.runtimeSettings.autoAuth;
+        if (!shouldAutoAuth) return;
+
+        boolean hasOAuthToken = hasOAuthToken();
+        boolean hasSavedPassword = application.runtimeSettings.password != null;
+
+        if (hasOAuthToken || hasSavedPassword) {
+            authFlow.tryAutoLogin().thenAccept(success -> {
+                if (!success && hasSavedPassword) {
+                    contextHelper.runInFxThread(authFlow::loginWithGui);
+                }
+            });
         }
+    }
+
+    private boolean hasOAuthToken() {
+        UserSettings settings = LauncherBackendAPIHolder.getApi().getUserSettings("backend", (a) -> null);
+        if (settings instanceof BackendSettings backendSettings) {
+            return backendSettings.auth != null && backendSettings.auth.accessToken != null;
+        }
+        return false;
     }
 
     public void changeAuthAvailability(AuthMethod authAvailability) {
@@ -165,10 +215,16 @@ public class LoginScene extends FxScene {
         var user = successAuth.user();
         application.authService.setUser(user);
         boolean savePassword = savePasswordCheckBox.isSelected();
+
         if (savePassword) {
             application.runtimeSettings.login = successAuth.recentLogin();
             application.runtimeSettings.password = null;
-            application.runtimeSettings.lastAuth = authAvailability.getName();
+            application.runtimeSettings.lastAuth = authAvailability.getName(); // сохраняем провайдер
+        } else {
+            // Галочки нет — очищаем всё включая провайдер
+            application.runtimeSettings.login = null;
+            application.runtimeSettings.password = null;
+            application.runtimeSettings.lastAuth = null;
         }
         if (user != null
                 && user.getAssets() != null) {

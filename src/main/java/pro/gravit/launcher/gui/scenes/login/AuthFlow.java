@@ -14,7 +14,9 @@ import pro.gravit.launcher.core.api.method.details.AuthWebDetails;
 import pro.gravit.launcher.core.api.method.password.AuthChainPassword;
 import pro.gravit.launcher.core.api.model.SelfUser;
 import pro.gravit.launcher.core.backend.LauncherBackendAPIHolder;
+import pro.gravit.launcher.core.backend.UserSettings;
 import pro.gravit.launcher.gui.scenes.login.methods.*;
+import pro.gravit.launcher.runtime.backend.BackendSettings;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -189,7 +191,21 @@ public class AuthFlow {
                 return;
             }
         }
-        if (tryOAuthLogin()) return;
+
+        // Пробуем тихую авторизацию только если токен есть И провайдер совпадает с сохранённым
+        if (hasOAuthToken() && isSameAuthProvider()) {
+            tryAutoLogin().thenAccept(success -> {
+                if (!success) {
+                    accessor.runInFxThread(() -> start().thenAccept((result) -> {
+                        if (onSuccessAuth != null) {
+                            onSuccessAuth.accept(result);
+                        }
+                    }));
+                }
+            });
+            return;
+        }
+
         start().thenAccept((result) -> {
             if (onSuccessAuth != null) {
                 onSuccessAuth.accept(result);
@@ -197,20 +213,32 @@ public class AuthFlow {
         });
     }
 
+    private boolean isSameAuthProvider() {
+        String lastAuth = accessor.getApplication().runtimeSettings.lastAuth;
+        if (lastAuth == null || authAvailability == null) return false;
+        return lastAuth.equals(authAvailability.getName());
+    }
 
-    private boolean tryOAuthLogin() {
-        var application = accessor.getApplication();
-        accessor.processing(LauncherBackendAPIHolder.getApi().tryAuthorize(), application.getTranslation("runtime.overlay.processing.text.auth"),
-                            (result) -> accessor.runInFxThread(
-                                    () -> onSuccessAuth.accept(new SuccessAuth(result, null, null))),
-                            (error) -> {
-                                if (error.equals(AuthRequestEvent.OAUTH_TOKEN_INVALID)) {
-                                    isTryAuthorizeChecked.set(true);
-                                    accessor.runInFxThread(this::loginWithGui);
-                                } else {
-                                }
-                            });
-        return isTryAuthorizeChecked.get();
+    private boolean hasOAuthToken() {
+        UserSettings settings = LauncherBackendAPIHolder.getApi().getUserSettings("backend", (a) -> null);
+        if (settings instanceof BackendSettings backendSettings) {
+            return backendSettings.auth != null && backendSettings.auth.accessToken != null;
+        }
+        return false;
+    }
+
+    public CompletableFuture<Boolean> tryAutoLogin() {
+        CompletableFuture<Boolean> result = new CompletableFuture<>();
+        accessor.processing(
+                LauncherBackendAPIHolder.getApi().tryAuthorize(),
+                accessor.getApplication().getTranslation("runtime.overlay.processing.text.auth"),
+                (user) -> {
+                    onSuccessAuth.accept(new SuccessAuth(user, null, null));
+                    result.complete(true);
+                },
+                (error) -> result.complete(false)
+        );
+        return result;
     }
 
 
