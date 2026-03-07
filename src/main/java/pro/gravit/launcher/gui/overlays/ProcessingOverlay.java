@@ -67,7 +67,7 @@ public class ProcessingOverlay extends FxOverlay {
                 }).exceptionally((error) -> {
                     if (onException != null) onException.accept(error);
                     else ContextHelper.runInFxThreadStatic(() -> errorHandle(error.getCause()));
-                    ContextHelper.runInFxThreadStatic(() -> hide(2500, onError));
+                    ContextHelper.runInFxThreadStatic(() -> hide(1500, onError));
                     return null;
                 });
             }));
