@@ -29,6 +29,7 @@ public class UpdateScene extends FxScene {
 
     public UpdateScene(JavaFXApplication application) {
         super("scenes/update/update.fxml", application);
+        this.isResetOnShow = true;
     }
 
     @Override
