@@ -53,10 +53,7 @@ public class TotpAuthMethod extends AbstractAuthMethod<AuthTotpDetails> {
     @Override
     public CompletableFuture<AuthFlow.LoginAndPasswordResult> auth(AuthTotpDetails details) {
         overlay.future = new CompletableFuture<>();
-        String totp = overlay.getCode();
-        if (totp != null && !totp.isEmpty()) {
-            return CompletableFuture.completedFuture(new AuthFlow.LoginAndPasswordResult(null, new AuthTotpPassword(totp)));
-        }
+        accessor.runInFxThread(() -> overlay.totpField.clear());
         return overlay.future;
     }
 
@@ -117,8 +114,10 @@ public class TotpAuthMethod extends AbstractAuthMethod<AuthTotpDetails> {
         }
 
         public void complete() {
+            String code = getCode();
+            if (code == null || code.isEmpty()) return;
             AuthTOTPPassword totpPassword = new AuthTOTPPassword();
-            totpPassword.totp = getCode();
+            totpPassword.totp = code;
             future.complete(new AuthFlow.LoginAndPasswordResult(null, totpPassword));
         }
 
@@ -132,8 +131,13 @@ public class TotpAuthMethod extends AbstractAuthMethod<AuthTotpDetails> {
 
         @Override
         public void reset() {
-            if(totpField == null) return;
-            totpField.setText("");
+            if (totpField != null) {
+                accessor.runInFxThread(() -> totpField.clear());
+            }
+            if (future != null && !future.isDone()) {
+                future.completeExceptionally(new UserAuthCanceledException());
+            }
+            future = null;
         }
 
         @Override
