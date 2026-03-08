@@ -43,11 +43,7 @@ public class RuntimeSettings extends UserSettings {
         runtimeSettings.locale = config.locale == null
                 ? LAUNCHER_LOCALE.RUSSIAN
                 : LAUNCHER_LOCALE.valueOf(config.locale);
-        try {
-            runtimeSettings.theme = SystemTheme.getSystemTheme();
-        } catch (Throwable e) {
-            runtimeSettings.theme = LAUNCHER_THEME.COMMON;
-        }
+        runtimeSettings.theme = null;
         return runtimeSettings;
     }
 
