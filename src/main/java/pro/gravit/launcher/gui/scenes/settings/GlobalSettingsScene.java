@@ -13,7 +13,6 @@ import pro.gravit.launcher.gui.scenes.settings.components.ThemeSelector;
 import pro.gravit.launcher.gui.stage.ConsoleStage;
 import pro.gravit.launcher.runtime.client.DirBridge;
 import pro.gravit.utils.helper.IOHelper;
-import pro.gravit.utils.helper.LogHelper;
 
 import java.io.File;
 import java.io.IOException;

@@ -17,7 +17,6 @@ import pro.gravit.launcher.runtime.client.events.ClientPreGuiPhase;
 import pro.gravit.launcher.runtime.gui.RuntimeProvider;
 import pro.gravit.utils.Version;
 import pro.gravit.utils.helper.JVMHelper;
-import pro.gravit.utils.helper.LogHelper;
 
 import javax.swing.*;
 import java.lang.reflect.Method;
@@ -36,7 +35,7 @@ public class JavaRuntimeModule extends LauncherModule {
 
     public JavaRuntimeModule() {
         super(new LauncherModuleInfo("StdJavaRuntime",
-                                     new Version(5, 0, 0, 6, Version.Type.BETA),
+                                     new Version(5, 0, 0, 7, Version.Type.BETA),
                                      0, new String[]{}, new String[]{"runtime"}));
     }
 

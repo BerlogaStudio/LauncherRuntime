@@ -4,7 +4,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import pro.gravit.launcher.gui.JavaRuntimeModule;
 import pro.gravit.utils.command.Command;
-import pro.gravit.utils.helper.LogHelper;
 
 public class VersionCommand extends Command {
 
@@ -23,7 +22,7 @@ public class VersionCommand extends Command {
 
     @Override
     public void invoke(String... args) {
-        logger.info("", JavaRuntimeModule.getLauncherInfo());
+        logger.info("{}", JavaRuntimeModule.getLauncherInfo());
         logger.info("JDK Path: {}", System.getProperty("java.home", "UNKNOWN"));
     }
 }

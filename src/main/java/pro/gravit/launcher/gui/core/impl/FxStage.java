@@ -15,7 +15,6 @@ import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import pro.gravit.launcher.gui.core.JavaFXApplication;
 import pro.gravit.launcher.gui.core.utils.JavaFxUtils;
-import pro.gravit.utils.helper.LogHelper;
 
 import java.io.IOException;
 import java.util.LinkedList;

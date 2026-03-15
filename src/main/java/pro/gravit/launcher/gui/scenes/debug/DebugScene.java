@@ -10,7 +10,6 @@ import pro.gravit.launcher.gui.core.JavaFXApplication;
 import pro.gravit.launcher.gui.JavaRuntimeModule;
 import pro.gravit.launcher.gui.helper.LookupHelper;
 import pro.gravit.launcher.gui.core.impl.FxScene;
-import pro.gravit.utils.helper.LogHelper;
 
 import java.io.EOFException;
 

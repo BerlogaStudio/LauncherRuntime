@@ -10,7 +10,6 @@ import pro.gravit.launcher.gui.core.impl.FxOverlay;
 import pro.gravit.launcher.gui.helper.LookupHelper;
 import pro.gravit.launcher.gui.core.impl.FxStage;
 import pro.gravit.launcher.gui.core.impl.ContextHelper;
-import pro.gravit.utils.helper.LogHelper;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
@@ -68,7 +67,7 @@ public class ProcessingOverlay extends FxOverlay {
                 }).exceptionally((error) -> {
                     if (onException != null) onException.accept(error);
                     else ContextHelper.runInFxThreadStatic(() -> errorHandle(error.getCause()));
-                    ContextHelper.runInFxThreadStatic(() -> hide(2500, onError));
+                    ContextHelper.runInFxThreadStatic(() -> hide(1500, onError));
                     return null;
                 });
             }));

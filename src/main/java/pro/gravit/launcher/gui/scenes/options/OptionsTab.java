@@ -76,7 +76,7 @@ public class OptionsTab {
         Label label = new Label();
         vBox.getChildren().add(checkBox);
         vBox.getChildren().add(label);
-        VBox.setMargin(vBox, new Insets(0, 0, 0, 30 * --padding));
+        VBox.setMargin(vBox, new Insets(0, 0, 0, 30 * padding));
         vBox.setOnMouseClicked((e) -> {
             if (e.getButton() == MouseButton.PRIMARY) {
                 checkBox.setSelected(!checkBox.isSelected());

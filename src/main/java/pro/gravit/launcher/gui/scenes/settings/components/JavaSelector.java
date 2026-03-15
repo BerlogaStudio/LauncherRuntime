@@ -13,7 +13,6 @@ import pro.gravit.launcher.core.api.features.ProfileFeatureAPI;
 import pro.gravit.launcher.core.backend.LauncherBackendAPI;
 import pro.gravit.launcher.core.backend.LauncherBackendAPIHolder;
 import pro.gravit.launcher.gui.helper.LookupHelper;
-import pro.gravit.utils.helper.LogHelper;
 
 public class JavaSelector {
 

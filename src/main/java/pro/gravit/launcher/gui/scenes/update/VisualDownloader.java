@@ -32,11 +32,15 @@ public class VisualDownloader extends LauncherBackendAPI.DownloadCallback {
         this.volume = volume;
         this.addLog = addLog;
     }
-
+    @Override
+    public void onStartPhase(UpdatePhase phase) {
+        super.onStartPhase(phase);
+        addLog.accept(application.getTranslation("runtime.scenes.update.phase." + phase.name().toLowerCase()));
+    }
     @Override
     public void onStage(String stage) {
         super.onStage(stage);
-        addLog.accept(String.format("Stage %s", stage));
+        addLog.accept(application.getTranslation("runtime.scenes.update.stage." + stage));
         ContextHelper.runInFxThreadStatic(this::resetProgress);
     }
 

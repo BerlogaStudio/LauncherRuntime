@@ -23,29 +23,28 @@ import pro.gravit.launcher.gui.core.impl.GuiObjectsContainer;
 import pro.gravit.launcher.gui.core.impl.MessageManager;
 import pro.gravit.launcher.gui.core.impl.FxScene;
 import pro.gravit.launcher.gui.core.service.*;
+import pro.gravit.launcher.gui.core.utils.SystemTheme;
 import pro.gravit.launcher.gui.stage.PrimaryStage;
 import pro.gravit.launcher.runtime.LauncherEngine;
 import pro.gravit.launcher.runtime.client.DirBridge;
 import pro.gravit.launcher.runtime.client.events.ClientGuiPhase;
-import pro.gravit.launcher.runtime.debug.DebugMain;
 import pro.gravit.launcher.runtime.managers.ConsoleManager;
 import pro.gravit.utils.command.BaseCommandCategory;
 import pro.gravit.utils.command.CommandCategory;
 import pro.gravit.utils.command.CommandHandler;
 import pro.gravit.utils.helper.IOHelper;
-import pro.gravit.utils.helper.LogHelper;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class JavaFXApplication extends Application {
@@ -70,6 +69,7 @@ public class JavaFXApplication extends Application {
     private boolean debugMode;
     private ResourceBundle resources;
     private static volatile LauncherBackendAPI.ResourceLayer resourceLayer;
+    private AtomicBoolean isFirstStart = new AtomicBoolean();
 
     public JavaFXApplication() {
         INSTANCE.set(this);
@@ -93,7 +93,10 @@ public class JavaFXApplication extends Application {
         backendCallbackService = new BackendCallbackService(this);
         backendCallbackService.initDataCallback = LauncherBackendAPIHolder.getApi().init();
         guiModuleConfig = new GuiModuleConfig();
-        runtimeSettings = (RuntimeSettings) LauncherBackendAPIHolder.getApi().getUserSettings("stdruntime", (a) -> RuntimeSettings.getDefault(guiModuleConfig));
+        runtimeSettings = (RuntimeSettings) LauncherBackendAPIHolder.getApi().getUserSettings("stdruntime", (a) -> {
+            isFirstStart.set(true);
+            return RuntimeSettings.getDefault(guiModuleConfig);
+        });
         runtimeSettings.apply();
         System.setProperty("prism.vsync", String.valueOf(runtimeSettings.globalSettings.prismVSync));
         DirBridge.dirUpdates = runtimeSettings.updatesDir == null
@@ -111,6 +114,13 @@ public class JavaFXApplication extends Application {
     @Override
     public void start(Stage stage) {
         debugMode = LauncherBackendAPIHolder.getApi().isTestMode();
+        if(isFirstStart.get() || runtimeSettings.theme == null) {
+            try {
+                runtimeSettings.theme = SystemTheme.getSystemTheme();
+            } catch (Throwable e) {
+                logger.error("Error when getting system theme", e);
+            }
+        }
         resetDirectory();
         // System loading
         if (runtimeSettings.locale == null) runtimeSettings.locale = RuntimeSettings.DEFAULT_LOCALE;

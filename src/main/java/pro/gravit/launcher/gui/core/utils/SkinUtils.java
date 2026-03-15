@@ -6,7 +6,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.PixelFormat;
 import javafx.scene.image.WritableImage;
 import pro.gravit.launcher.base.Downloader;
-import pro.gravit.utils.helper.LogHelper;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -86,7 +85,7 @@ public class SkinUtils {
         int size = 8 * renderScale;
         int x_offset = 5 * 8 * renderScale;
         int y_offset = 8 * renderScale;
-        logger.debug("ShinHead debug: W: {} Scale: {} Offset: {}", width, renderScale, size);
+        logger.debug("SkinHead debug: W: {} Scale: {} Offset: {}", width, renderScale, size);
         return image.getSubimage(x_offset, y_offset, size, size);
     }
 
@@ -94,7 +93,7 @@ public class SkinUtils {
         int width = image.getWidth();
         int renderScale = width / 64;
         int offset = 8 * renderScale;
-        logger.debug("ShinHead debug: W: {} Scale: {} Offset: {}", width, renderScale, offset);
+        logger.debug("SkinHead debug: W: {} Scale: {} Offset: {}", width, renderScale, offset);
         return image.getSubimage(offset, offset, offset, offset);
     }
 

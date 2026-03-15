@@ -6,7 +6,6 @@ import javafx.scene.layout.Pane;
 import pro.gravit.launcher.gui.core.JavaFXApplication;
 import pro.gravit.launcher.gui.core.impl.FxStage;
 import pro.gravit.utils.command.Command;
-import pro.gravit.utils.helper.LogHelper;
 
 public class GetSizeCommand extends Command {
 

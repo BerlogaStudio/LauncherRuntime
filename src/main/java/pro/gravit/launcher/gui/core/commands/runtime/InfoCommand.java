@@ -7,7 +7,6 @@ import javafx.application.Platform;
 import pro.gravit.launcher.gui.core.JavaFXApplication;
 import pro.gravit.utils.command.Command;
 import pro.gravit.utils.helper.JVMHelper;
-import pro.gravit.utils.helper.LogHelper;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -8,7 +8,6 @@ import pro.gravit.launcher.core.backend.LauncherBackendAPI;
 import pro.gravit.launcher.gui.core.JavaFXApplication;
 import pro.gravit.launcher.gui.helper.LookupHelper;
 import pro.gravit.launcher.gui.core.impl.FxScene;
-import pro.gravit.utils.helper.LogHelper;
 
 import java.util.concurrent.CompletionException;
 
@@ -30,6 +29,7 @@ public class UpdateScene extends FxScene {
 
     public UpdateScene(JavaFXApplication application) {
         super("scenes/update/update.fxml", application);
+        this.isResetOnShow = true;
     }
 
     @Override

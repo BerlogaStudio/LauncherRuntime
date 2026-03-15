@@ -12,7 +12,6 @@ import pro.gravit.launcher.gui.core.JavaFXApplication;
 import pro.gravit.launcher.gui.core.interfaces.ValueComponent;
 import pro.gravit.launcher.gui.core.internal.FXExecutorService;
 import pro.gravit.launcher.gui.core.internal.FXMLFactory;
-import pro.gravit.utils.helper.LogHelper;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionException;
@@ -144,7 +143,7 @@ public abstract class FxComponent extends VisualComponentBase {
     }
 
     public void errorHandle(String e) {
-        logger.error("", e);
+        logger.error("{}", e);
         application.messageManager.createNotification("Error", e);
     }
 
