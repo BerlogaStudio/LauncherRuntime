@@ -9,6 +9,7 @@ import pro.gravit.launcher.core.api.features.ProfileFeatureAPI;
 import pro.gravit.launcher.core.backend.LauncherBackendAPI;
 import pro.gravit.launcher.gui.core.JavaFXApplication;
 
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,18 +37,31 @@ public class OptionsTab {
 
     public void addProfileOptionals(LauncherBackendAPI.ClientProfileSettings profileSettings) {
         watchers.clear();
-        for (ProfileFeatureAPI.OptionalMod optionalFile : profileSettings.getAllOptionals()) {
-            if (!optionalFile.isVisible()) continue;
+
+        List<ProfileFeatureAPI.OptionalMod> sorted = profileSettings.getAllOptionals()
+                                                                    .stream()
+                                                                    .filter(ProfileFeatureAPI.OptionalMod::isVisible)
+                                                                    .sorted(Comparator
+                                                                                    .comparingInt(ProfileFeatureAPI.OptionalMod::getDepth)
+                                                                                    .thenComparing(m -> m.getCategory() == null ? "" : m.getCategory())
+                                                                                    .thenComparing(ProfileFeatureAPI.OptionalMod::getName))
+                                                                    .toList();
+
+        for (ProfileFeatureAPI.OptionalMod optionalFile : sorted) {
             List<String> libraries = optionalFile.getDependencies() == null ? List.of() :
                     optionalFile.getDependencies()
                                 .stream()
+                                .filter(ProfileFeatureAPI.OptionalMod::isVisible)
                                 .map(ProfileFeatureAPI.OptionalMod::getName)
                                 .toList();
 
+
             Consumer<Boolean> setCheckBox =
-                    add(optionalFile.getCategory() == null ? "GLOBAL" : optionalFile.getCategory(), optionalFile.getName(),
-                        optionalFile.getDescription(), profileSettings.getEnabledOptionals().contains(optionalFile),
-                        0,
+                    add(optionalFile.getCategory() == null ? "GLOBAL" : optionalFile.getCategory(),
+                        optionalFile.getName(),
+                        optionalFile.getDescription(),
+                        profileSettings.getEnabledOptionals().contains(optionalFile),
+                        optionalFile.getDepth(),
                         (isSelected) -> {
                             if (isSelected) profileSettings.enableOptional(optionalFile, this::callWatcher);
                             else profileSettings.disableOptional(optionalFile, this::callWatcher);
@@ -76,7 +90,7 @@ public class OptionsTab {
         Label label = new Label();
         vBox.getChildren().add(checkBox);
         vBox.getChildren().add(label);
-        VBox.setMargin(vBox, new Insets(0, 0, 0, 30 * padding));
+        VBox.setMargin(vBox, new Insets(0, 0, 0, 15 * padding));
         vBox.setOnMouseClicked((e) -> {
             if (e.getButton() == MouseButton.PRIMARY) {
                 checkBox.setSelected(!checkBox.isSelected());
