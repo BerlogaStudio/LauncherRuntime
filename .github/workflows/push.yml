@@ -1,16 +1,19 @@
-name: push
+name: build-and-release
 on:
   push:
-#  create:
-#    tags:
-#      - v*
+    branches: [master]
+    tags: ['v*']
+  workflow_dispatch:
+
 jobs:
-  launcher:
+  build:
     name: LauncherRuntime
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           submodules: recursive
 
@@ -18,49 +21,40 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ~/.gradle/caches
-          key: gravit-${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}-launcher-runtime
+          key: gravit-${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}-launcher-runtime
 
       - name: Set up JDK 21
-        uses: actions/setup-java@v1
+        uses: actions/setup-java@v4
         with:
           java-version: 21
+          distribution: temurin
 
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
       - name: Build with Gradle
-        run: ./gradlew  build
+        run: ./gradlew build
 
-      - name: Create artifacts
+      - name: Package artifacts
         run: |
           mkdir -p artifacts
-          cd runtime
-          zip -r -9 ../artifacts/runtime.zip *
-          cd ../build/libs
-          cp *.jar ../../artifacts
+          (cd runtime && zip -r -9 ../artifacts/runtime.zip *)
+          cp build/libs/*.jar artifacts/
 
-      - name: Upload artifacts
+      - name: Upload workflow artifacts
         uses: actions/upload-artifact@v4
         with:
           name: LauncherRuntime
           path: artifacts
 
-      - name: Get version value, set to env
-        if: startsWith(github.event.ref, 'refs/tags')
-        run: echo "LAUNCHER_VERSION=$(echo ${{ github.event.ref }} | awk -F\/ '{print $3}')" >> $GITHUB_ENV
-
-      - name: Create release
-        id: create_release
-        uses: softprops/action-gh-release@v1
-        if: startsWith(github.event.ref, 'refs/tags')
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        #       Список настроек тута: https://github.com/softprops/action-gh-release#-customizing
-        #       Можно сделать пуш описания релиза из файла
+      - name: Release on tag push
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
         with:
-          name: GravitLauncher Runtime ${{ env.LAUNCHER_VERSION }}
-          draft: false
+          name: LauncherRuntime ${{ github.ref_name }}
+          tag_name: ${{ github.ref_name }}
           prerelease: false
+          make_latest: "true"
           files: |
-            ./artifacts/runtime.zip
-            ./artifacts/*.jar
+            artifacts/runtime.zip
+            artifacts/*.jar
