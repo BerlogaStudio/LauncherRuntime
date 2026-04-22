@@ -26,7 +26,7 @@
     </VBox>
     <HBox alignment="CENTER" minHeight="-Infinity" prefHeight="256.0" AnchorPane.bottomAnchor="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="100.0">
         <children>
-            <ImageView id="logo" pickOnBounds="true" preserveRatio="true">
+            <ImageView id="logo" fitHeight="200.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
                 <image>
                     <Image url="@../../images/logo.png" />
                 </image>

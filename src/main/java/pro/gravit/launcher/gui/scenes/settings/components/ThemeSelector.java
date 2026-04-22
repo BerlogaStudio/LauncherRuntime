@@ -21,16 +21,20 @@ public class ThemeSelector {
 
     public ThemeSelector(JavaFXApplication application, Pane layout) {
         this.application = application;
-        comboBox = LookupHelper.lookup(layout, "#themeCombo");
-        comboBox.getItems().clear();
-        comboBox.setConverter(new ThemeConverter());
-        for(var e : RuntimeSettings.LAUNCHER_THEME.values()) {
-            comboBox.getItems().add(e);
+        ComboBox<RuntimeSettings.LAUNCHER_THEME> found = LookupHelper.<ComboBox<RuntimeSettings.LAUNCHER_THEME>>lookupIfPossible(layout, "#themeCombo").orElse(null);
+        this.comboBox = found;
+        if (found == null) {
+            return;
         }
-        comboBox.getSelectionModel().select(Objects.requireNonNullElse(application.runtimeSettings.theme,
+        found.getItems().clear();
+        found.setConverter(new ThemeConverter());
+        for(var e : RuntimeSettings.LAUNCHER_THEME.values()) {
+            found.getItems().add(e);
+        }
+        found.getSelectionModel().select(Objects.requireNonNullElse(application.runtimeSettings.theme,
                                                                        RuntimeSettings.LAUNCHER_THEME.COMMON));
-        comboBox.setOnAction(e -> {
-            RuntimeSettings.LAUNCHER_THEME theme = comboBox.getValue();
+        found.setOnAction(e -> {
+            RuntimeSettings.LAUNCHER_THEME theme = found.getValue();
             if (theme == null || (theme == RuntimeSettings.LAUNCHER_THEME.COMMON && application.runtimeSettings.theme == null)) return;
             if(theme == application.runtimeSettings.theme) return;
             application.runtimeSettings.theme = theme;
