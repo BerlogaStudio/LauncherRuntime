@@ -56,6 +56,7 @@ public class RuntimeSettings extends UserSettings {
         @LauncherNetworkAPI BELARUSIAN("be", "Беларуская"),
         @LauncherNetworkAPI UKRAINIAN("uk", "Українська"),
         @LauncherNetworkAPI POLISH("pl", "Polska"),
+        @LauncherNetworkAPI GERMAN("de", "Deutsch"),
         @LauncherNetworkAPI ENGLISH("en", "English");
         public final String name;
         public final String displayName;
@@ -67,8 +68,7 @@ public class RuntimeSettings extends UserSettings {
     }
 
     public enum LAUNCHER_THEME {
-        @LauncherNetworkAPI COMMON(null, "default"),
-        @LauncherNetworkAPI DARK("dark", "dark");
+        @LauncherNetworkAPI COMMON(null, "default");
         public final String name;
         public final String displayName;
 
