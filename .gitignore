@@ -119,3 +119,5 @@ project/target
 !/.vscode
 /.vscode/*
 !/.vscode/launch.json
+# macOS
+.DS_Store
