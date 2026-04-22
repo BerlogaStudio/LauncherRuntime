@@ -60,7 +60,7 @@ public class ServerButton extends FxComponent {
         LookupHelper.<Labeled>lookup(layout, "#nameServer").setText(profile.getName());
         LookupHelper.<Labeled>lookup(layout, "#genreServer").setText(profile.getMinecraftVersion());
         this.serverLogo = LookupHelper.lookup(layout, "#serverLogo");
-        URL logo = application.tryResource(String.format(SERVER_BUTTON_CUSTOM_IMAGE, profile.getUUID().toString()));
+        URL logo = application.tryResource(String.format(SERVER_BUTTON_CUSTOM_IMAGE, profile.getTitle()));
         if(logo == null) {
             logo = application.tryResource(SERVER_BUTTON_DEFAULT_IMAGE);
         }

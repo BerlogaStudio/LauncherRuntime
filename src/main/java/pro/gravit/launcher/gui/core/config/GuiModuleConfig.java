@@ -27,8 +27,8 @@ public class GuiModuleConfig {
 
     public static Object getDefault() {
         GuiModuleConfig config = new GuiModuleConfig();
-        config.createAccountURL = "https://gravitlauncher.com/createAccount.php";
-        config.forgotPassURL = "https://gravitlauncher.com/fogotPass.php";
+        config.createAccountURL = "https://berlogacraft.com/download.html";
+        config.forgotPassURL = "https://berlogacraft.com/index.php?do=lostpassword";
         config.lazy = false;
         config.disableOfflineMode = false;
         config.autoAuth = false;
